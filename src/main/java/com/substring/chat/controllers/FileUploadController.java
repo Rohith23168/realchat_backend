@@ -37,9 +37,15 @@ public class FileUploadController {
 
             Path path = Paths.get(UPLOAD_DIR + fileName);
 
-            Files.copy(file.getInputStream(), path);
+            Files.copy(
+                    file.getInputStream(),
+                    path,
+                    StandardCopyOption.REPLACE_EXISTING
+            );
 
             String baseUrl = System.getenv("APP_URL");
+
+            System.out.println("APP_URL = " + baseUrl);
 
             if (baseUrl == null || baseUrl.isBlank()) {
                 baseUrl = "http://localhost:8080";
