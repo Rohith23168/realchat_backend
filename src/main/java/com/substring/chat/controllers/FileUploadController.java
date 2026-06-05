@@ -14,7 +14,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {
+        "http://localhost:5173",
+        "https://chat-frontend-gold-psi.vercel.app"
+})
 public class FileUploadController {
 
     private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/";
@@ -36,7 +39,13 @@ public class FileUploadController {
 
             Files.copy(file.getInputStream(), path);
 
-            String imageUrl = "http://localhost:8080/uploads/" + fileName;
+            String baseUrl = System.getenv("APP_URL");
+
+            if (baseUrl == null || baseUrl.isBlank()) {
+                baseUrl = "http://localhost:8080";
+            }
+
+            String imageUrl = baseUrl + "/uploads/" + fileName;
 
             return ResponseEntity.ok(imageUrl);
 

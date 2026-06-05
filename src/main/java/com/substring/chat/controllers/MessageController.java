@@ -16,7 +16,10 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/v1/messages")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {
+        "http://localhost:5173",
+        "https://chat-frontend-gold-psi.vercel.app"
+})
 public class MessageController {
 
     private final MessageRepository messageRepository;

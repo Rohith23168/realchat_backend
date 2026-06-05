@@ -13,7 +13,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/rooms")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {
+        "http://localhost:5173",
+        "https://chat-frontend-gold-psi.vercel.app"
+})
 public class RoomController {
 
     private final RoomRepository roomRepository;
