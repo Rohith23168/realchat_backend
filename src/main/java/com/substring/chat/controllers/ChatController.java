@@ -13,7 +13,9 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @Controller
 @CrossOrigin(origins = {
@@ -82,12 +84,15 @@ public class ChatController {
         message.setContent(request.getContent());
         message.setSender(request.getSender());
         message.setImageUrl(request.getImageUrl());
-        message.setTimeStamp(LocalDateTime.now());
+        message.setTimeStamp(OffsetDateTime.now(ZoneId.of("Asia/Kolkata")));
         message.setRoom(room);
 
-        // STATUS
+// STATUS
         message.setDelivered(true);
         message.setSeen(false);
+
+// audio (if exists in entity)
+        message.setAudioUrl(request.getAudioUrl());
 
         messageRepository.save(message);
 
@@ -96,7 +101,7 @@ public class ChatController {
         response.setSender(message.getSender());
         response.setContent(message.getContent());
         response.setImageUrl(message.getImageUrl());
-        message.setAudioUrl(request.getAudioUrl());
+        response.setAudioUrl(request.getAudioUrl());
         response.setTimeStamp(message.getTimeStamp());
 
         messagingTemplate.convertAndSend(

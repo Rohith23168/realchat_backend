@@ -2,6 +2,7 @@ package com.substring.chat.payload;
 
 import lombok.Data;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 public class MessageResponse {
@@ -11,5 +12,5 @@ public class MessageResponse {
     private String content;
     private String imageUrl;
     private String audioUrl;
-    private LocalDateTime timeStamp;
+    private OffsetDateTime timeStamp;
 }
