@@ -1,16 +1,15 @@
 package com.substring.chat.controllers;
 
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -20,22 +19,29 @@ import java.util.UUID;
 })
 public class FileUploadController {
 
-    private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/";
+    private static final String UPLOAD_DIR = "uploads/";
 
     @PostMapping("/upload")
     public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) {
         try {
 
+            // 1. Validate file
             if (file.isEmpty()) {
                 return ResponseEntity.badRequest().body("File is empty");
             }
 
+            // 2. Ensure folder exists
             File folder = new File(UPLOAD_DIR);
-            if (!folder.exists()) folder.mkdirs();
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
 
-            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            // 3. Create unique file name
+            String fileName = System.currentTimeMillis()
+                    + "_" + file.getOriginalFilename();
 
-            Path path = Paths.get(UPLOAD_DIR + fileName);
+            // 4. FIXED PATH (IMPORTANT)
+            Path path = Paths.get(UPLOAD_DIR, fileName);
 
             Files.copy(
                     file.getInputStream(),
@@ -43,21 +49,23 @@ public class FileUploadController {
                     StandardCopyOption.REPLACE_EXISTING
             );
 
-            String baseUrl = System.getenv("APP_URL");
+            // 5. Build BASE URL safely (NO ENV dependency)
+            String baseUrl = ServletUriComponentsBuilder
+                    .fromCurrentContextPath()
+                    .build()
+                    .toUriString();
 
-            System.out.println("APP_URL = " + baseUrl);
-
-            if (baseUrl == null || baseUrl.isBlank()) {
-                baseUrl = "http://localhost:8080";
-            }
-
+            // 6. Final image URL
             String imageUrl = baseUrl + "/uploads/" + fileName;
+
+            System.out.println("UPLOAD SUCCESS: " + imageUrl);
 
             return ResponseEntity.ok(imageUrl);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body("Upload failed: " + e.getMessage());
+            return ResponseEntity.status(500)
+                    .body("Upload failed: " + e.getMessage());
         }
     }
 }
