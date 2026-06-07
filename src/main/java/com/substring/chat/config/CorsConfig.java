@@ -17,7 +17,7 @@ public class CorsConfig {
                 registry.addMapping("/**")
                         .allowedOrigins(
                                 "http://localhost:5173",
-                                "https://chat-frontend-gold-psi.vercel.app"
+                                "https://chat-frontend-nine-puce.vercel.app"
                         )
                         .allowedMethods("*")
                         .allowedHeaders("*")
