@@ -16,7 +16,7 @@ import java.util.UUID;
 @RequestMapping("/api/v1")
 @CrossOrigin(origins = {
         "http://localhost:5173",
-        "https://chat-frontend-eight-psi.vercel.app"
+        "https://realchat-frontend-kohl.vercel.app"
 })
 public class FileUploadController {
 
