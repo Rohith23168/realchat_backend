@@ -20,7 +20,7 @@ import java.time.ZonedDateTime;
 @Controller
 @CrossOrigin(origins = {
         "http://localhost:5173",
-        "https://chat-frontend-eight-psi.vercel.app/"
+        "https://chat-frontend-eight-psi.vercel.app"
 })
 public class ChatController {
 
